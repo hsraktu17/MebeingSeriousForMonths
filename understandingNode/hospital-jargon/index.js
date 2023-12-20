@@ -70,6 +70,7 @@ app.post('/',(req,res)=>{
 })
 
 
+//put request when the user wants to update the data in the database
 app.put('/',(req,res) =>{
   for(let i = 0; i < users[0].kidney.length; i++){
     users[0].kidney[i].healthy = true 
@@ -80,6 +81,8 @@ app.put('/',(req,res) =>{
 })
 
 
+
+//delete request when user wants to delete the data
 app.delete('/',(req,res)=>{
 //  let totalKidneys = users[0].kidney.length;
   for(let i = 0; i < users[0].kidney.length; i++){
