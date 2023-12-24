@@ -1,60 +1,59 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+const fs = require('fs')
+const Port = 3000
 
-const app = express();
-const PORT = 3001;
+app.use(express.json())
 
-app.use(bodyParser.json());
-
-let todos = [];
+let todos = []
 
 app.get('/',(req,res)=>{
-    res.send("heyy there!!")
+    res.send("Todos Server")
 })
 
-app.get('/todos', (req, res) => {
-  res.json(todos);
-});
+app.get('/todos',(req,res)=>{
+    res.status(200).json(todos)
+})
 
-app.get('/todos/:id', (req, res) => {
-  const todo = todos.find(t => t.id === parseInt(req.params.id));
-  if (!todo) {
-    res.status(404).send();
-  } else {
-    res.json(todo);
-  }
-});
+app.get('/todos/:id',(req,res)=>{
+    const todoId = todos.find(t => t.id === parseInt(req.params.id))
+    if(!todoId){
+        res.status(404).send()
+    }else{
+        res.status(200).json(todos[todoId])
+    }
+})
 
 let count = 1;
-app.post('/todos', (req, res) => {
+
+
+app.post('/todos',(req,res)=>{
     const newTodo = {
-        id: count, // unique random id
-        title: req.body.title,
-        description: req.body.description
-      };
-      count++;
-      todos.push(newTodo);
-      res.status(201).json(newTodo);
-});
-
-app.put('/todos/:id', (req, res) => {
-  const todoIndex = todos.findIndex(t => t.id === parseInt(req.params.id));
-  if (todoIndex === -1) {
-    res.status(404).send();
-  } else {
-    todos[todoIndex].title = req.body.title;
-    todos[todoIndex].description = req.body.description;
-    res.json(todos[todoIndex]);
-  }
-});
+        id : count,
+        title : req.body.title,
+        completed : false,
+        description : req.body.description
+    }
+    count++;
+    todos.push(newTodo);
+    res.status(200).json(newTodo)
+})
 
 
+app.put('/todos/:id',(req,res)=>{
+    const todoId = todos.find(t => t.id === parseInt(req.params.id))
+    if(!todoId){
+        res.status(404).send()
+    }else{
+        todos[todoId].title = req.params.title;
+        // todos[todoId].completed = req.params.completed;
+        todos[todoId].description = req.params.description;
+    }
+    res.status(200).json(todos[todoId])
+})
 
-// for all other routes, return 404
-app.use((req, res, next) => {
-  res.status(404).send();
-});
 
-app.listen(PORT,()=>{
-    console.log(`Server Started at ${PORT}`)
+app.listen(Port,()=>{
+    console.log(`Server started ${Port}`)
 })
