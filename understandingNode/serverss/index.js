@@ -53,6 +53,19 @@ app.put('/todos/:id',(req,res)=>{
     res.status(200).json(todos[todoId])
 })
 
+app.delete('/todo/:id',(req,res) =>{
+    const todoId = todos.find(t => t.id === parseInt(req.params.id))
+    if(todoId === -1){
+        res.status(404).send()
+    }else{
+        todos.splice(todoId,1)
+        res.status(200).send()
+    }
+})
+
+app.use((req, res, next) => {
+    res.status(404).send();
+  });
 
 app.listen(Port,()=>{
     console.log(`Server started ${Port}`)
