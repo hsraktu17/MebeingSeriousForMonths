@@ -7,10 +7,6 @@ const z = require('zod')
 
 app.use(express.json())
 
-app.get('/',(req,res)=>{
-  console.log(__dirname)
-  res.send("heelp")
-})
 
 app.get('/health-checkup',(req,res)=>{
   const kidneyId = req.query.kidneyId;
