@@ -2,48 +2,48 @@ const z = require('zod')
 const express = require('express')
 const app = express()
 
+const fs = require('fs')
+const { CallTracker } = require('assert')
+
 const schema = z.object({
+  // userId : z.number(),
   name : z.string(),
   email : z.string().email(),
   password : z.string().min(8)
 })
 
-//User In memory database
+//promisify
 
 app.use(express.json())
+let ALL_USER;
 
-const ALL_USER = [
-  {
-    name:"Utkarsh Raj Srivastava",
-    email:"utkars@gmail.com",
-    password:"12345566"
-  },{
-    name:"jbg asbf",
-    email:"jbg@gmail.com",
-    password:"1234556i777"
-  },{
-    name:"klsr",
-    email:"klsr@gmail.com",
-    password:"1222234444444"
-  },{
-    name:"rahul",
-    email:"rahul@hotmail.com",
-    password:"0987654321"
-  }
-]
-
-
-
-app.get('/userData',(req,res)=>{
+app.get('/userData',async (req,res)=>{
+  ALL_USER = await loadUserData();
   res.status(203).json({ALL_USER})
 })
 
-app.get('/noOfUsers',(req,res)=>{
+app.get('/noOfUsers',async (req,res)=>{
+  ALL_USER = await loadUserData() 
   res.json({noOfUser : ALL_USER.length})
 })
 
+const userDataFilePath = 'user.json'
 
-app.post('/addUser',(req,res)=>{
+async function saveUserData(){
+  await fs.writeFile(userDataFilePath, JSON.stringify(ALL_USER, null, 2), 'utf-8')
+}
+
+async function loadUserData(){
+  try{
+    const data = await fs.readFile(userDataFilePath, 'utf-8')
+    return JSON.parse(data)
+  }
+  catch(err){
+    return []
+  }
+}
+
+app.post('/addUser',async(req,res)=>{
   const name = req.body.name
   const email = req.body.email
   const password = req.body.password
@@ -53,12 +53,12 @@ app.post('/addUser',(req,res)=>{
   const response = schema.safeParse(obj);
 
   if(response.success){
+    ALL_USER = await loadUserData()
     ALL_USER.push(obj)
+    await saveUserData();
   }else{
     res.send("invalid input")
   }
-
-  
 
   res.json({ALL_USER})
 
