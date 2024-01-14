@@ -30,12 +30,12 @@ app.get('/noOfUsers',async (req,res)=>{
 const userDataFilePath = 'user.json'
 
 async function saveUserData(){
-  await fs.promises.writeFile(userDataFilePath, JSON.stringify(ALL_USER, null, 2), 'utf-8')
+  await  fs.promises.writeFile(userDataFilePath, JSON.stringify(ALL_USER, null, 2), 'utf-8')
 }
 
 async function loadUserData(){
   try{
-    const data = await fs.promises.readFile(userDataFilePath, 'utf-8')
+    const data = await  fs.promises.readFile(userDataFilePath, 'utf-8')
     return JSON.parse(data)
   }
   catch(err){
