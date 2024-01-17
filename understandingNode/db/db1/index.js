@@ -13,6 +13,12 @@ app.get('/user', async(req,res) =>{
     res.json({ALL_user})
 })
 
+/*
+create 
+read
+update
+delete
+*/
 app.get('/user/:email', async (req,res)=>{
     const userEmail = req.params.email
     const user = await User.findOne({email : userEmail})
