@@ -4,9 +4,24 @@ const app = express();
 
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://admin:015uk6K28qGd7xik@cluster0.1imslpk.mongodb.net/user_app", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://admin:015uk6K28qGd7xik@cluster0.1imslpk.mongodb.net/user_app");
 
 const User = mongoose.model('User', { username: String, email: String, password: String });
+
+app.get('/user', async(req,res) =>{
+    const ALL_user = await User.find()
+    res.json({ALL_user})
+})
+
+app.get('/user/:email', async (req,res)=>{
+    const userEmail = req.params.email
+    const user = await User.findOne({email : userEmail})
+    if(user){
+        res.json(user)
+    }else{
+        res.send("user does not exist")
+    }
+})
 
 app.post('/signup', async function (req, res) {
     const { username, email, password } = req.body;
@@ -31,7 +46,7 @@ app.post('/signup', async function (req, res) {
     }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
