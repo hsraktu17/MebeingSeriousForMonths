@@ -54,7 +54,7 @@ app.put('/updateUser/:emailID', async (req, res)=>{
     const { name, email, password, DOB, gender } = req.body;
 
     try{
-       const userToUpdate = User.findOne({ email : emailID})
+       const userToUpdate = await User.findOne({ email : emailID})
        if(!userToUpdate){
         res.send("user not found")
        }
@@ -62,7 +62,7 @@ app.put('/updateUser/:emailID', async (req, res)=>{
        if(email) userToUpdate.email =  email;
        if(password) userToUpdate.password = password
        if(DOB) userToUpdate.DOB = DOB;
-       if(gender) gender = gender;
+       if(gender) userToUpdate.gender = gender;
 
        await userToUpdate.save()
        res.send("User updated")
