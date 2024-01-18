@@ -60,7 +60,7 @@ app.put('/updateUser/:emailid', async (req, res) => {
             return res.status(404).send("User not found");
         }
 
-        // Update fields if provided in the request body
+        
         if (name) userToUpdate.name = name;
         if (email) userToUpdate.email = email;
         if (password) userToUpdate.password = password;
@@ -70,13 +70,39 @@ app.put('/updateUser/:emailid', async (req, res) => {
         await userToUpdate.save();
         res.send("User updated successfully");
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error);
         res.status(500).send("Internal Server Error");
     }
 })
 
 
+//Delete
+app.delete('/deleteUser/:emailid', async (req, res) => {
+    const userEmail = req.params.emailid;
+    try {
+        const userToBeDeleted = await User.findOneAndDelete({ email: userEmail });
 
-app.listen(3001, () => {
+        if (!userToBeDeleted) {
+            return res.status(404).send("User not found");
+        }
+
+        res.send("User deleted successfully");
+    } catch (error) {
+        console.error(error);
+
+        // Check for specific Mongoose error codes
+        if (error.name === 'CastError') {
+            // Handle invalid email format
+            return res.status(400).send("Invalid email format");
+        }
+
+        // Handle other Mongoose errors
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+
+app.listen(3000, () => {
     console.log("Server Started")
 })
