@@ -17,9 +17,6 @@ app.post('/signup', async (req, res) => {
     if(userExist){
         res.send("User exist in db")
     }else{
-        if( !name || !email || !password || !DOB || !gender){
-            
-        }
         const user = new User({
             name : name,
             email : email,
@@ -52,10 +49,31 @@ app.get('/user/:email', async (req, res)=>{
 
 
 //Update user
-app.put('/updateUser', async (req, res)=>{
+app.put('/updateUser/:emailid', async (req, res) => {
+    const userEmail = req.params.emailid;
     const { name, email, password, DOB, gender } = req.body;
 
-})
+    try {
+        const userToUpdate = await User.findOne({ email: userEmail });
+
+        if (!userToUpdate) {
+            return res.status(404).send("User not found");
+        }
+
+        // Update fields if provided in the request body
+        if (name) userToUpdate.name = name;
+        if (email) userToUpdate.email = email;
+        if (password) userToUpdate.password = password;
+        if (DOB) userToUpdate.DOB = DOB;
+        if (gender) userToUpdate.gender = gender;
+
+        await userToUpdate.save();
+        res.send("User updated successfully");
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 
 
