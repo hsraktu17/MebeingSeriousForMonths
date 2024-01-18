@@ -49,31 +49,28 @@ app.get('/user/:email', async (req, res)=>{
 
 
 //Update user
-app.put('/updateUser/:emailid', async (req, res) => {
-    const userEmail = req.params.emailid;
+app.put('/updateUser/:emailID', async (req, res)=>{
+    const emailID = req.params.emailID;
     const { name, email, password, DOB, gender } = req.body;
 
-    try {
-        const userToUpdate = await User.findOne({ email: userEmail });
+    try{
+       const userToUpdate = User.findOne({ email : emailID})
+       if(!userToUpdate){
+        res.send("user not found")
+       }
+       if(name) userToUpdate.name = name;
+       if(email) userToUpdate.email =  email;
+       if(password) userToUpdate.password = password
+       if(DOB) userToUpdate.DOB = DOB;
+       if(gender) gender = gender;
 
-        if (!userToUpdate) {
-            return res.status(404).send("User not found");
-        }
-
-        // Update fields if provided in the request body
-        if (name) userToUpdate.name = name;
-        if (email) userToUpdate.email = email;
-        if (password) userToUpdate.password = password;
-        if (DOB) userToUpdate.DOB = DOB;
-        if (gender) userToUpdate.gender = gender;
-
-        await userToUpdate.save();
-        res.send("User updated successfully");
-    } catch (error) {
-        console.error(error); // Log the error for debugging
-        res.status(500).send("Internal Server Error");
+       await userToUpdate.save()
+       res.send("User updated")
+    }catch(error){
+        console.error(error);
+        res.send("internal server error")
     }
-});
+})
 
 
 
