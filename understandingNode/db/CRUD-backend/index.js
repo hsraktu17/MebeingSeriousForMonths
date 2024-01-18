@@ -17,6 +17,9 @@ app.post('/signup', async (req, res) => {
     if(userExist){
         res.send("User exist in db")
     }else{
+        if( !name || !email || !password || !DOB || !gender){
+            
+        }
         const user = new User({
             name : name,
             email : email,
@@ -29,13 +32,33 @@ app.post('/signup', async (req, res) => {
     res.send("user added sucessfully")
 })
 
+//Read user
+app.get('/user', async (req, res) =>{
+    const ALL_USER = await User.find()
+    res.json({ALL_USER})
+})
+
+//Read particular user
+app.get('/user/:email', async (req, res)=>{
+    const getEmail = req.params.email
+    const checkUser = await User.findOne({ email : getEmail })
+    if(checkUser){
+        res.json(checkUser)
+    }
+    else{
+        res.send("User does not exist")
+    }
+})
+
+
 //Update user
 app.put('/updateUser', async (req, res)=>{
     const { name, email, password, DOB, gender } = req.body;
+
 })
 
 
 
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log("Server Started")
 })
