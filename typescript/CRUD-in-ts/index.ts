@@ -70,25 +70,24 @@ app.get('/user/:email', async (req : Request, res : Response) => {
 })
 
 //Update user
-app.put('/updateUser', async (req : Request, res : Response) => {
-    const userEmail = req.params.emailid;
+app.put('/updateUser/:emailid', async (req : Request, res : Response) => {
+    const emails = req.params.emailid
     const { name, email, password, DOB, gender } = req.body;
 
-    try {
-        const userToUpdate = await User.findOne({ email: userEmail });
+    try{
+        const userToBeUpdated = await User.findOne({ email : emails })
 
-        if (!userToUpdate) {
+        if(!userToBeUpdated) {
             return res.status(404).send("User not found");
         }
 
+        if(name) userToBeUpdated.name = name;
+        if(email) userToBeUpdated.email = email;
+        if(password) userToBeUpdated.password = password;
+        if(DOB) userToBeUpdated.DOB = DOB;
+        if(gender) userToBeUpdated.gender = gender;
 
-        if (name) userToUpdate.name = name;
-        if (email) userToUpdate.email = email;
-        if (password) userToUpdate.password = password;
-        if (DOB) userToUpdate.DOB = DOB;
-        if (gender) userToUpdate.gender = gender;
-
-        await userToUpdate.save();
+        await userToBeUpdated.save();
         res.send("User updated successfully");
     } catch (error) {
         console.error(error);
@@ -96,7 +95,7 @@ app.put('/updateUser', async (req : Request, res : Response) => {
     }
 })
 
-app.delete('/deleteUser/:emailid', async (req, res) => {
+app.delete('/deleteUser/:emailid', async (req : Request, res : Response) => {
     const userEmail = req.params.emailid;
     try {
         const userToBeDeleted = await User.findOneAndDelete({ email: userEmail });
