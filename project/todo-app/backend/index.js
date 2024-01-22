@@ -9,7 +9,7 @@ app.use(express.json())
 
 app.post('/todo',async function (req, res){
     const createPayload = req.body;
-    const parsedPayload = createTodo
+    const parsedPayload = createTodo.safeParse(createPayload)
     if (!parsedPayload.success){
         res.status(411).json({
             msg : "you sent the wrong input"
@@ -18,22 +18,36 @@ app.post('/todo',async function (req, res){
     }
     await todo.create({
         title : createPayload.title,
-        description : createPayload.description
+        description : createPayload.description,
+        completed : false
+    })
+    res.json({
+        msg : "todo created"
     })
 })
 
-app.get('/todos', function (req, res){
-
+app.get('/todos', async function (req, res){
+    const ALL_TODO = await todo.find()
+    res.json({ ALL_TODO })
 })
 
-app.put('/completed', function (req, res) {
+app.put('/completed', async function (req, res) {
     const updatePayload = req.body;
     const parsedPayload = updateTodo.safeParse(updatePayload)
     if(!parsedPayload.success){
         res.status(411).json({
             msg : "you sent the wrong input"
         })
+        return;
     }
+    await todo.update({
+        _id : req.body.id
+    },{
+        completed : true
+    })
+    res.json({
+        msg : "todo marked as completed"
+    })
 })
 
 app.listen(PORT, ()=> console.log(`Server started at ${PORT}`))
