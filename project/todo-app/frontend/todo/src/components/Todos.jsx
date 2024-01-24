@@ -1,13 +1,14 @@
-function Todos({todos}){
-    return <div>
-        {todos.map(function(todo){
-            return <div>
-                <h1> {todo.title} </h1>
-                <h2> {todo.description} </h2>
-                <button> {todo.completed === true ? "completed" : "mark as completed"} </button>
-            </div>
-        })}
-    </div>
+function Todos (props) {
+
+    const { title, description, isCompletes } = props
+
+    return (
+        <div>
+            <h1> {title} </h1>
+            <h2> {description} </h2>
+            <button> {isCompletes ? "Mark as Completed" : "Mark as incompleted"} </button>
+        </div>
+    )
 }
 
-export default Todos
+export default Todos;
