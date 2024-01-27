@@ -1,37 +1,58 @@
-import React,{ useState, useEffect } from "react";
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 
-function App(){
+function useTodos(n){
+  const [todos, setTodos] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const value = setInterval(()=>{
+      useEffect(() => {
+        axios.get("https://sum-server.100xdevs.com/todos")
+          .then(res => {
+            setTodos(res.data.todos);
+            setLoading(false);
+          })
+        }, [])
+    },n*1000)
+
+    axios.get("https://sum-server.100xdevs.com/todos")
+      .then(res => {
+        setTodos(res.data.todos);
+        setLoading(false);
+      })
+      return ()=>{
+        clearInterval(value)
+      }
+    }, [n])
+
+  return {todos, loading};
+}
+
+function App() {
   
+  const {todos,loading} = useTodos(2);
 
-  return(
-    <div>
-      <MyComponent/>
-      
+  if(loading){
+    return <div>
+      loading......
     </div>
+  }
+
+  return (
+    <>
+      {todos.map(todo => <Track key = {todo.id} todo={todo} />)}
+    </>
   )
 }
 
-
-
-function MyComponent() {
-  const [count, setCount] = useState(0)
-  useEffect(() => {
-    // Perform setup or data fetching here 
-    console.error("component mounted")
-
-    return () => {
-      // Cleanup code (similar to componentWillUnmount)
-      console.log("component unmounted")
-    };
-  }, [count]);
+function Track({ todo }) {
   return <div>
-    <p>{count}</p>
-    <button onClick={()=>{
-      setCount(prevcount => prevcount + 1)
-    }}>click me!!</button>
+    {todo.title}
+    <br />
+    {todo.description}
   </div>
-  // Render UI
 }
 
-export default App;
+export default App
