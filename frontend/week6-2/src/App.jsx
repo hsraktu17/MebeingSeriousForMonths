@@ -1,25 +1,46 @@
 import { useEffect, useState } from "react";
 
 function App(){
-  const [todos, setTodos] = useState([])
 
-  useEffect(()=>{
-    fetch('https://sum-server.100xdevs.com/todos')
-      .then(async function(res){
-        const json = await res.json();
-        setTodos(json.todos)
-      })
-  },[])
+  const[clicker, setClicker] = useState(1)  
 
   return <div>
-    {todos.map(todo => <Todo key = {todo.id} title = {todo.title} description={todo.description} />)}
+    <button onClick={()=>{
+      setClicker(1)
+    }} > 1</button>
+
+    <button onClick={()=>{
+      setClicker(2)
+    }} >2</button>
+
+    <button onClick={()=>{
+      setClicker(3)
+    }} >3</button>
+
+    <button onClick={()=>{
+      setClicker(4)
+    }} >4</button>
+
+    <Todo id = {clicker}/>
+
   </div>
 }
 
-function Todo({title, description}){
-  return<div>
-    <h1>{title}</h1>
-    <h4>{description}</h4>
+function Todo ({id}){
+  const [todo, setTodo] = useState({})
+
+  useEffect(()=>{
+    fetch('https://sum-server.100xdevs.com/todo?id='+id)
+      .then(async function(res){
+        const json = await res.json()
+        setTodo(json.todo)
+      })
+  },[id])
+
+  return <div>
+    <p>{id}</p>
+    <h1>{todo.title}</h1>
+    <h4>{todo.description}</h4>
   </div>
 }
 
