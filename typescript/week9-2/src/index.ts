@@ -1,41 +1,19 @@
-interface User{
-    firstName : string
-    lastName : string
-    age : number
-    email ?:string
+type Employee = {
+    name : string
+    startDate : number
 }
 
-function isLegal(user : User) : boolean{
-    if(user.age > 18){
-        return true
-    }
-    else{
-        return false;
-    }
+interface Manager {
+    name  : string
+    department : string
 }
 
+type TechLead = Manager & Employee
 
-function greet(user : User) : void{
-    console.log("hi " + user.firstName + user.lastName)
+const teamLead : TechLead = {
+    name: "Utkarsh",
+    startDate : Date.now(),
+    department : "vsf"
 }
 
-function checkEmail(user : User) : boolean{
-    return !!user.email;
-}
-
-
-const user = {
-    firstName : "Utkarsh ",
-    lastName : "Srivastava",
-    age : 21,
-}
-
-
-const legal : boolean = isLegal(user)
-console.log(legal)
-
-const greeting = greet(user)
-console.log(greeting)
-
-const checking : boolean = checkEmail(user)
-console.log(checking)
+console.log(teamLead)
