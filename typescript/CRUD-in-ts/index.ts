@@ -8,7 +8,7 @@ const Port = 3000
 
 interface User {
     name : string,
-    email : string,
+    email :  string,
     password : string,
     DOB : number,
     gender : "male" | "female"
