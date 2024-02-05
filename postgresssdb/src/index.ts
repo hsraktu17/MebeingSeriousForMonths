@@ -17,19 +17,22 @@ import { Client } from 'pg'
 //     console.log(result)
 // }
 
-async function insertData(){
+async function insertDataAndDisplay(){
     const client = new Client({
         connectionString : "postgresql://utkarsh172002srivastava:NMJCkU7xu1Km@ep-shy-sunset-a5nh7mer.us-east-2.aws.neon.tech/test?sslmode=require"
     })
     try{
         await client.connect();
-        const res = await client.query("INSERT INTO users (username, email, password) VALUES ('username2', 'user3@example.com', 'user_password');");
-        console.log("Insertion success " + res);
-    }catch(err){
-        console.error("error is   " + err);
-    }finally{
-        await client.end();
-    }
-}
 
-insertData()
+        await client.query("INSERT INTO users (username, email, password) VALUES ('username_here', 'user@example.com', 'user_password');")
+
+        const res = await client.query("SELECT * FROM users WHERE id = 1;");
+        console.log("Insertion done" + res.rows)
+    }catch(err){
+        console.error(err)
+    }finally{
+        await client.end()
+    }
+    
+}
+insertDataAndDisplay()

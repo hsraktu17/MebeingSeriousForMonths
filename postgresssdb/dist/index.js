@@ -23,22 +23,23 @@ const pg_1 = require("pg");
 //     `)
 //     console.log(result)
 // }
-function insertData() {
+function insertDataAndDisplay() {
     return __awaiter(this, void 0, void 0, function* () {
         const client = new pg_1.Client({
             connectionString: "postgresql://utkarsh172002srivastava:NMJCkU7xu1Km@ep-shy-sunset-a5nh7mer.us-east-2.aws.neon.tech/test?sslmode=require"
         });
         try {
             yield client.connect();
-            const res = yield client.query("INSERT INTO users (username, email, password) VALUES ('username2', 'user3@example.com', 'user_password');");
-            console.log("Insertion success " + res);
+            yield client.query("INSERT INTO users (username, email, password) VALUES ('username_here', 'user@example.com', 'user_password');");
+            const res = yield client.query("SELECT * FROM users WHERE id = 1;");
+            console.log("Insertion done" + res.rows);
         }
         catch (err) {
-            console.error("error is   " + err);
+            console.error(err);
         }
         finally {
             yield client.end();
         }
     });
 }
-insertData();
+insertDataAndDisplay();
