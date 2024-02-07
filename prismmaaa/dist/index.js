@@ -11,17 +11,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-function insertUser(email, password, firstname, lastname) {
+function insertUser({ firstname, lastname, phone }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const users = yield prisma.user121.create({
-            data: {
-                email,
-                password,
-                firstname,
-                lastname,
-            }
-        });
-        console.log(users);
+        try {
+            const res = yield prisma.users.create({
+                data: {
+                    firstname,
+                    lastname,
+                    phone
+                }
+            });
+            console.log(res);
+        }
+        catch (error) {
+            console.error("Error inserting user:", error);
+            // Handle the error, e.g., return an error response or throw an error
+        }
     });
 }
-insertUser("klk@gamil.com", "Adfiwfhwl", "Utkarsh", "fheuo");
+insertUser({
+    firstname: 'Utkarsh',
+    lastname: 'Srivastava',
+    phone: 9889
+});

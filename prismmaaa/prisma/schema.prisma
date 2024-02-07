@@ -10,18 +10,10 @@ datasource db {
   url      = "postgres://postgres.tfkrjbrnqvvihtraxvdb:zrcmalsa172@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
 }
 
-model User121 {
-  id Int @id @default(autoincrement())
-  email String @unique
-  firstname String?
-  lastname String?
-  password String
-}
 
-model Todos {
+model users {
   id Int @id @default(autoincrement())
-  email String @unique
-  done Boolean @default(false)
-  description String?
-  userId Int
+  firstname String
+  lastname String 
+  phone BigInt
 }
