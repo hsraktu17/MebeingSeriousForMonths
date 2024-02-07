@@ -9,26 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const pg_1 = require("pg");
-function insertData() {
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
+function insertUser(email, password, firstname, lastname) {
     return __awaiter(this, void 0, void 0, function* () {
-        const client = new pg_1.Client({
-            connectionString: "postgresql://utkarsh172002srivastava:5ri9tGmBdxFE@ep-crimson-lab-a5xy5daj.us-east-2.aws.neon.tech/neondb?sslmode=require"
+        const users = yield prisma.user121.create({
+            data: {
+                email,
+                password,
+                firstname,
+                lastname,
+            }
         });
-        try {
-            yield client.connect();
-            const insertDataInTable = "SELECT * FROM users";
-            const res = yield client.query(insertDataInTable);
-            console.log(res.rows);
-        }
-        catch (err) {
-            console.error(err);
-        }
-        finally {
-            yield client.end();
-        }
+        console.log(users);
     });
 }
-const display = () => __awaiter(void 0, void 0, void 0, function* () {
-});
-insertData();
+insertUser("klk@gamil.com", "Adfiwfhwl", "Utkarsh", "fheuo");

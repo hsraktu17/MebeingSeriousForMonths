@@ -1,7 +1,6 @@
 import { Client } from "pg";
 
 
-
 async function insertData(){
 
     const client = new Client({
@@ -11,9 +10,9 @@ async function insertData(){
 
     try{
         await client.connect()
-        const insertDataInTable = "INSERT INTO users (username, email, password) VALUES ('username2', 'user3@example.com', 'user_password');"
+        const insertDataInTable = "SELECT * FROM users"
         const res = await client.query(insertDataInTable);
-        console.log(res)
+        console.log(res.rows)
     }catch(err){
         console.error(err)
     }finally{
