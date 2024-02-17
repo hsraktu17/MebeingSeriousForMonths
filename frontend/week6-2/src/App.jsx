@@ -25,8 +25,9 @@ function Todo({id}){
       .then(async function (res){
         const json = await res.json();
         setTodo(json.todo);
+        console.log("hi")
       })
-  },[id])
+  },)
 
   return (
     <div>
