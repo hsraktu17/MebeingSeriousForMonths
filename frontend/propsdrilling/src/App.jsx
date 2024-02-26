@@ -21,7 +21,7 @@ function Count({count, setCount}) {
 }
 
 function CountRenderer() {
-  const count = useContext(CountContext)
+  const count = useContext(CountContext)//context api
   return <div>
     {count}
   </div>
