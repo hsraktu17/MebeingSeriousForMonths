@@ -39,4 +39,19 @@ async function insertUser(username : string, email : string, password : string){
     
 }
 
-insertUser("amit","amit@gmail.com","amit1234").catch(console.error)
+async function getUser(email : string){
+    await client.connect();
+    try{
+        const query = `SELECT * FROM users17 WHERE email = $1`
+        const values = [email]
+        const res = await client.query(query, values)
+        console.log(res);
+    }catch(err){
+        console.error(err)
+    }finally{
+        await client.end()
+    }
+}
+
+insertUser("ayush","ayush@gmail.com","ayush1234").catch(console.error)
+// getUser("utkarsh172@gmail.com").catch(console.error)
