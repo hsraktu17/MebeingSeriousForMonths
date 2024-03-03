@@ -1,22 +1,14 @@
+import { Hono } from 'hono'
 
+const app = new Hono()
 
-export interface Env {
-}
+app.post('/', async (c) => {
+  const body = await c.req.json()
+  console.log(body);
+  console.log(c.req.header("Authorization"));
+  console.log(c.req.query("param"));
 
-export default {
-	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		console.log(request.body);
-		console.log(request.headers);
-		console.log(request.method);
-		
-		if (request.method === "GET") {
-			return Response.json({
-				message: "you sent a get request"
-			});
-		} else {
-			return Response.json({
-				message: "you did not send a get request"
-			});
-		}
-	},
-};
+  return c.text('Hello Hono!')
+})
+
+export default app
